@@ -12,7 +12,7 @@ Enable it with `M-x kubectx-mode` or `(kubectx-mode 1)`
 The mode line will be updated every 10 seconds or what is defined in
 `kubectx-update-interval`. 
 
-You can also trigger the update with emacsclient as a PROMPT_COMMAND:
+You can also trigger the update with `emacsclient` as a `PROMPT_COMMAND`:
 
 ```bash
 export PROMPT_COMMAND="emacsclient -e '(kubectx-update)' &>/dev/null"
