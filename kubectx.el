@@ -6,10 +6,11 @@
 (defun kubectx-run-kubectl (&rest args)
   "Run kubectl command"
   (with-temp-buffer
-    (if (and (executable-find kubectx-kubectl-command)
-             (= (apply 'call-process kubectx-kubectl-command nil t nil args) 0))
-        (replace-regexp-in-string "\n\\'" "" (buffer-string))
-      "n/a")))
+    (let ((default-directory "~"))
+      (if (and (executable-find kubectx-kubectl-command)
+               (= (apply 'call-process kubectx-kubectl-command nil t nil args) 0))
+          (replace-regexp-in-string "\n\\'" "" (buffer-string))
+        "n/a"))))
 
 (defun kubectx-update ()
   "Update kubectx mode-line string with current context and namespace"
