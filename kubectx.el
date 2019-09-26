@@ -2,6 +2,7 @@
 (defvar kubectx-timer nil)
 (defvar kubectx-string "")
 (defvar kubectx-update-interval 10)
+(defvar kubectx-string-format " %C %N" "String to display in mode-line (%C = context, %N = namespace)")
 
 (defun kubectx-run-kubectl (&rest args)
   "Run kubectl command"
@@ -12,12 +13,16 @@
           (replace-regexp-in-string "\n\\'" "" (buffer-string))
         "n/a"))))
 
+(defun make-kubectx-string (context namespace)
+  "Create kubectx string to display"
+  (replace-regexp-in-string "%C" context (replace-regexp-in-string "%N" namespace kubectx-string-format t) t))
+
 (defun kubectx-update ()
   "Update kubectx mode-line string with current context and namespace"
   (interactive)
   (let ((ctx (kubectx-run-kubectl "config" "current-context"))
         (ns (kubectx-run-kubectl "config" "view" "--minify" "--output" "jsonpath={..namespace}")))
-    (setq kubectx-string (concat " " ctx " " ns))))
+    (setq kubectx-string (make-kubectx-string ctx ns))))
 
 (define-minor-mode kubectx-mode
   "Add kubectx and namespace info to the mode line"
