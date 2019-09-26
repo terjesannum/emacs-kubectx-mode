@@ -1,7 +1,34 @@
-(defvar kubectx-kubectl-command "kubectl")
+;;; kubectx.el --- Display current kubernetes context and namespace in Emacs mode line
+
+;; Copyright (C) 2018-2019 Terje Sannum
+
+;; Author: Terje Sannum <terje@offpiste.org>
+;; Created: 19 Oct 2018
+;; Keywords: mode-line kubernetes
+;; Homepage: https://github.com/terjesannum/emacs-kubectx-mode-line
+
+;; This program is free software; you can redistribute it and/or modify
+;; it under the terms of the GNU General Public License as published by
+;; the Free Software Foundation, either version 3 of the License, or
+;; (at your option) any later version.
+
+;; This program is distributed in the hope that it will be useful,
+;; but WITHOUT ANY WARRANTY; without even the implied warranty of
+;; MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+;; GNU General Public License for more details.
+
+;; You should have received a copy of the GNU General Public License
+;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+;;; Commentary:
+
+;; See https://github.com/terjesannum/emacs-kubectx-mode-line/blob/master/README.md
+
+;;; Code:
+(defvar kubectx-kubectl-command "kubectl" "Kubectl binary")
 (defvar kubectx-timer nil)
 (defvar kubectx-string "")
-(defvar kubectx-update-interval 10)
+(defvar kubectx-update-interval 10 "Number of seconds between background mode-line updates")
 (defvar kubectx-string-format " %C %N" "String to display in mode-line (%C = context, %N = namespace)")
 
 (defun kubectx-run-kubectl (&rest args)
@@ -40,3 +67,5 @@
     (kubectx-update)))
 
 (provide 'kubectx)
+
+;;; kubectx.el ends here
