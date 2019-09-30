@@ -49,7 +49,8 @@
   (interactive)
   (let ((ctx (kubectx-run-kubectl "config" "current-context"))
         (ns (kubectx-run-kubectl "config" "view" "--minify" "--output" "jsonpath={..namespace}")))
-    (setq kubectx-string (make-kubectx-string ctx ns))))
+    (setq kubectx-string (make-kubectx-string ctx ns))
+    (force-mode-line-update t)))
 
 (define-minor-mode kubectx-mode
   "Add kubectx and namespace info to the mode line"
