@@ -29,7 +29,7 @@
 (defvar kubectx-timer nil)
 (defvar kubectx-string "")
 (defvar kubectx-update-interval 10 "Number of seconds between background mode-line updates")
-(defvar kubectx-string-format " %C %N" "String to display in mode-line (%C = context, %N = namespace)")
+(defvar kubectx-string-format " [kube:%C %N]" "String to display in mode-line (%C = context, %N = namespace)")
 
 (defun kubectx-run-kubectl (&rest args)
   "Run kubectl command"
