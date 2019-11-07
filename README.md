@@ -2,6 +2,8 @@
 
 Switch kubectl context and namespace and display current setting in Emacs mode line.
 
+## Install
+
 Clone this repository and add to `load-path`:
 ```lisp
 (add-to-list 'load-path "~/.emacs.d/emacs-kubectx-mode")
