@@ -1,4 +1,4 @@
-# emacs-kubectx-mode
+# kubectx-mode
 
 Switch kubectl context and namespace and display current setting in Emacs mode line.
 
