@@ -40,6 +40,28 @@
           (replace-regexp-in-string "\n\\'" "" (buffer-string))
         "n/a"))))
 
+(defun kubectx-mode-namespaces ()
+  "Get list of namespaces"
+  (split-string (kubectx-mode-run-kubectl "get" "namespaces" "--output" "jsonpath={.items[*].metadata.name}")))
+
+(defun kubectx-mode-set-namespace (namespace)
+  (interactive
+   (list
+    (completing-read "Namespace: " (kubectx-mode-namespaces) nil t)))
+  (kubectx-mode-run-kubectl "config" "set-context" "--current" (format "--namespace=%s" namespace))
+  (kubectx-mode-mode-line-update))
+
+(defun kubectx-mode-contexts ()
+  "Get list of contexts"
+  (split-string (kubectx-mode-run-kubectl "config" "get-contexts" "--output" "name")))
+
+(defun kubectx-mode-set-context (context)
+  (interactive
+   (list
+    (completing-read "Context: " (kubectx-mode-contexts) nil t)))
+  (kubectx-mode-run-kubectl "config" "use-context" context)
+  (kubectx-mode-mode-line-update))
+
 (defun kubectx-mode-kubectx-string (context namespace)
   "Create kubectx string to display"
   (replace-regexp-in-string "%C" context (replace-regexp-in-string "%N" namespace kubectx-mode-mode-line-string-format t) t))
