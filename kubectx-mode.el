@@ -45,6 +45,7 @@
   (split-string (kubectx-mode-run-kubectl "get" "namespaces" "--output" "jsonpath={.items[*].metadata.name}")))
 
 (defun kubectx-mode-set-namespace (namespace)
+  "Set current kubectl namespace"
   (interactive
    (list
     (completing-read "Namespace: " (kubectx-mode-namespaces) nil t)))
@@ -56,6 +57,7 @@
   (split-string (kubectx-mode-run-kubectl "config" "get-contexts" "--output" "name")))
 
 (defun kubectx-mode-set-context (context)
+  "set current kubectl context"
   (interactive
    (list
     (completing-read "Context: " (kubectx-mode-contexts) nil t)))
