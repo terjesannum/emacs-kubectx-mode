@@ -1,13 +1,22 @@
 # emacs-kubectx-mode
 
-Display current kubectl context and namespace in Emacs mode line.
+Switch kubectl context and namespace and display current setting in Emacs mode line.
 
+Clone this repository and add to `load-path`:
 ```lisp
 (add-to-list 'load-path "~/.emacs.d/emacs-kubectx-mode")
 (require 'kubectx-mode)
+(kubectx-mode 1)
 ```
 
-Enable it with `M-x kubectx-mode` or `(kubectx-mode 1)`
+### Keybindings
+
+| Keys        | Description               |
+| ---------   | ------------------------- |
+| `C-c C-k c` | Set kubectl context       |
+| `C-c C-k n` | Set kubectl namespace     |
+
+### Mode line
 
 The mode line will be updated every 10 seconds or what is defined in
 `kubectx-mode-mode-line-update-interval`. 

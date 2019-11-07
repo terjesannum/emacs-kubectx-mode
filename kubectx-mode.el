@@ -25,11 +25,16 @@
 ;; See https://github.com/terjesannum/emacs-kubectx-mode/blob/master/README.md
 
 ;;; Code:
-(defvar kubectx-mode-kubectl-command "kubectl" "Kubectl binary")
+(defvar kubectx-mode-kubectl-command "kubectl" "Kubectl executable")
 (defvar kubectx-mode-timer nil)
 (defvar kubectx-mode-mode-line-string "")
 (defvar kubectx-mode-mode-line-update-interval 10 "Number of seconds between background mode-line updates")
 (defvar kubectx-mode-mode-line-string-format " [kube:%C %N]" "String to display in mode-line (%C = context, %N = namespace)")
+(defvar kubectx-mode-submap)
+(define-prefix-command 'kubectx-mode-submap)
+(define-key kubectx-mode-submap "c" 'kubectx-mode-set-context)
+(define-key kubectx-mode-submap "n" 'kubectx-mode-set-namespace)
+(defvar kubectx-mode-keybind (kbd "C-c C-k") "Keybind where kubectx-mode-submap is assigned")
 
 (defun kubectx-mode-run-kubectl (&rest args)
   "Run kubectl command"
@@ -77,8 +82,9 @@
     (force-mode-line-update t)))
 
 (define-minor-mode kubectx-mode
-  "Add kubectx and namespace info to the mode line"
+  "Switch kubernetes context and show info in the mode line"
   :global t
+  :keymap `((,kubectx-mode-keybind . ,kubectx-mode-submap))
   (when (not global-mode-string) (setq global-mode-string '("")))
   (when kubectx-mode-timer (cancel-timer kubectx-mode-timer))
   (if (not kubectx-mode)
