@@ -29,3 +29,7 @@ You can also trigger the update with `emacsclient` as a `PROMPT_COMMAND`:
 ```bash
 export PROMPT_COMMAND="emacsclient -e '(kubectx-mode-line-update)' &>/dev/null"
 ```
+
+### Pod shell
+
+To run interactive pod shells in Emacs, see `pod-shell` in [emacs-shell](https://github.com/terjesannum/emacs-shell)
