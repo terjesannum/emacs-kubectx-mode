@@ -25,60 +25,60 @@
 ;; See https://github.com/terjesannum/emacs-kubectx-mode/blob/master/README.md
 
 ;;; Code:
-(defvar kubectx-mode-kubectl-command "kubectl" "Kubectl executable")
-(defvar kubectx-mode-timer nil)
-(defvar kubectx-mode-mode-line-string "")
-(defvar kubectx-mode-mode-line-update-interval 10 "Number of seconds between background mode-line updates")
-(defvar kubectx-mode-mode-line-string-format " [kube:%C %N]" "String to display in mode-line (%C = context, %N = namespace)")
+(defvar kubectx-kubectl-command "kubectl" "Kubectl executable")
+(defvar kubectx-mode-line-update-timer nil)
+(defvar kubectx-mode-line-string "")
+(defvar kubectx-mode-line-update-interval 10 "Number of seconds between background mode-line updates")
+(defvar kubectx-mode-line-string-format " [kube:%C %N]" "String to display in mode-line (%C = context, %N = namespace)")
 (defvar kubectx-mode-submap)
 (define-prefix-command 'kubectx-mode-submap)
-(define-key kubectx-mode-submap "c" 'kubectx-mode-set-context)
-(define-key kubectx-mode-submap "n" 'kubectx-mode-set-namespace)
+(define-key kubectx-mode-submap "c" 'kubectx-set-context)
+(define-key kubectx-mode-submap "n" 'kubectx-set-namespace)
 (defvar kubectx-mode-keybind (kbd "C-c C-k") "Keybind where kubectx-mode-submap is assigned")
 
-(defun kubectx-mode-run-kubectl (&rest args)
+(defun kubectx-run-kubectl-command (&rest args)
   "Run kubectl command"
   (with-temp-buffer
     (let ((default-directory "~"))
-      (if (and (executable-find kubectx-mode-kubectl-command)
-               (= (apply 'call-process kubectx-mode-kubectl-command nil t nil args) 0))
+      (if (and (executable-find kubectx-kubectl-command)
+               (= (apply 'call-process kubectx-kubectl-command nil t nil args) 0))
           (replace-regexp-in-string "\n\\'" "" (buffer-string))
         "n/a"))))
 
-(defun kubectx-mode-namespaces ()
+(defun kubectx-namespaces ()
   "Get list of namespaces"
-  (split-string (kubectx-mode-run-kubectl "get" "namespaces" "--output" "jsonpath={.items[*].metadata.name}")))
+  (split-string (kubectx-run-kubectl-command "get" "namespaces" "--output" "jsonpath={.items[*].metadata.name}")))
 
-(defun kubectx-mode-set-namespace (namespace)
+(defun kubectx-set-namespace (namespace)
   "Set current kubectl namespace"
   (interactive
    (list
-    (completing-read "Namespace: " (kubectx-mode-namespaces) nil t)))
-  (kubectx-mode-run-kubectl "config" "set-context" "--current" (format "--namespace=%s" namespace))
-  (kubectx-mode-mode-line-update))
+    (completing-read "Namespace: " (kubectx-namespaces) nil t)))
+  (kubectx-run-kubectl-command "config" "set-context" "--current" (format "--namespace=%s" namespace))
+  (kubectx-mode-line-update))
 
-(defun kubectx-mode-contexts ()
+(defun kubectx-contexts ()
   "Get list of contexts"
-  (split-string (kubectx-mode-run-kubectl "config" "get-contexts" "--output" "name")))
+  (split-string (kubectx-run-kubectl-command "config" "get-contexts" "--output" "name")))
 
-(defun kubectx-mode-set-context (context)
+(defun kubectx-set-context (context)
   "set current kubectl context"
   (interactive
    (list
-    (completing-read "Context: " (kubectx-mode-contexts) nil t)))
-  (kubectx-mode-run-kubectl "config" "use-context" context)
-  (kubectx-mode-mode-line-update))
+    (completing-read "Context: " (kubectx-contexts) nil t)))
+  (kubectx-run-kubectl-command "config" "use-context" context)
+  (kubectx-mode-line-update))
 
-(defun kubectx-mode-kubectx-string (context namespace)
+(defun kubectx-mode-line-string (context namespace)
   "Create kubectx string to display"
-  (replace-regexp-in-string "%C" context (replace-regexp-in-string "%N" namespace kubectx-mode-mode-line-string-format t) t))
+  (replace-regexp-in-string "%C" context (replace-regexp-in-string "%N" namespace kubectx-mode-line-string-format t) t))
 
-(defun kubectx-mode-mode-line-update ()
+(defun kubectx-mode-line-update ()
   "Update kubectx mode-line string with current context and namespace"
   (interactive)
-  (let ((ctx (kubectx-mode-run-kubectl "config" "current-context"))
-        (ns (kubectx-mode-run-kubectl "config" "view" "--minify" "--output" "jsonpath={..namespace}")))
-    (setq kubectx-mode-mode-line-string (kubectx-mode-kubectx-string ctx ns))
+  (let ((ctx (kubectx-run-kubectl-command "config" "current-context"))
+        (ns (kubectx-run-kubectl-command "config" "view" "--minify" "--output" "jsonpath={..namespace}")))
+    (setq kubectx-mode-line-string (kubectx-mode-line-string ctx ns))
     (force-mode-line-update t)))
 
 (define-minor-mode kubectx-mode
@@ -86,16 +86,16 @@
   :global t
   :keymap `((,kubectx-mode-keybind . ,kubectx-mode-submap))
   (when (not global-mode-string) (setq global-mode-string '("")))
-  (when kubectx-mode-timer (cancel-timer kubectx-mode-timer))
+  (when kubectx-mode-line-update-timer (cancel-timer kubectx-mode-line-update-timer))
   (if (not kubectx-mode)
       (setq global-mode-string
-            (delq 'kubectx-mode-mode-line-string global-mode-string))
-    (add-to-list 'global-mode-string 'kubectx-mode-mode-line-string t)
-    (when (> kubectx-mode-mode-line-update-interval 0)
-      (setq kubectx-mode-timer
-            (run-at-time nil kubectx-mode-mode-line-update-interval
-                         'kubectx-mode-mode-line-update)))
-    (kubectx-mode-mode-line-update)))
+            (delq 'kubectx-mode-line-string global-mode-string))
+    (add-to-list 'global-mode-string 'kubectx-mode-line-string t)
+    (when (> kubectx-mode-line-update-interval 0)
+      (setq kubectx-mode-line-update-timer
+            (run-at-time nil kubectx-mode-line-update-interval
+                         'kubectx-mode-line-update)))
+    (kubectx-mode-line-update)))
 
 (provide 'kubectx-mode)
 
