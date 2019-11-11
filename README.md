@@ -21,7 +21,7 @@ Clone this repository and add to `load-path`:
 ### Mode line
 
 The variable `kubectx-mode-line-string-format` defines what to display in the mode line, and
-mode line will be updated every 10 seconds or what is defined in
+mode line will be updated every 5 seconds or what is defined in
 `kubectx-mode-line-update-interval`.
 
 You can also trigger the update with `emacsclient` as a `PROMPT_COMMAND`:

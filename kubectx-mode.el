@@ -28,7 +28,7 @@
 (defvar kubectx-kubectl-command "kubectl" "Kubectl executable")
 (defvar kubectx-mode-line-update-timer nil)
 (defvar kubectx-mode-line-string "")
-(defvar kubectx-mode-line-update-interval 10 "Number of seconds between background mode-line updates")
+(defvar kubectx-mode-line-update-interval 5 "Number of seconds between background mode-line updates")
 (defvar kubectx-mode-line-string-format " [kube:%C %N]" "String to display in mode-line (%C = context, %N = namespace)")
 (defvar kubectx-mode-submap)
 (define-prefix-command 'kubectx-mode-submap)
