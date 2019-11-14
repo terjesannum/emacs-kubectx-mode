@@ -1,6 +1,6 @@
 # kubectx-mode
 
-Switch kubectl context and namespace and display current setting in Emacs mode line.
+Switch [kubectl](https://kubernetes.io/docs/reference/kubectl/overview/) context and namespace and display current setting in Emacs mode line.
 
 ## Install
 
@@ -24,12 +24,8 @@ The variable `kubectx-mode-line-string-format` defines what to display in the mo
 mode line will be updated every 5 seconds or as often defined in
 `kubectx-mode-line-update-interval`.
 
-You can also trigger the update with `emacsclient` e.g. as a `PROMPT_COMMAND`:
+You can also trigger the update with e.g. `emacsclient` as a `PROMPT_COMMAND`:
 
 ```bash
 export PROMPT_COMMAND="emacsclient -e '(kubectx-mode-line-update)' &>/dev/null"
 ```
-
-### Pod shell / Tramp mode
-
-To run interactive shells and edit files in pods from Emacs, see `pod-shell` in [emacs-shell](https://github.com/terjesannum/emacs-shell).
