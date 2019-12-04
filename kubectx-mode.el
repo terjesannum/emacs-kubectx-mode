@@ -34,7 +34,7 @@
 (define-prefix-command 'kubectx-mode-submap)
 (define-key kubectx-mode-submap "c" 'kubectx-set-context)
 (define-key kubectx-mode-submap "n" 'kubectx-set-namespace)
-(defvar kubectx-mode-keybind (kbd "C-c C-k") "Keybind where kubectx-mode-submap is assigned.")
+(defvar kubectx-mode-keybind (kbd "C-c C-k") "Keybind where `kubectx-mode-submap' is assigned.")
 
 (defun kubectx-run-kubectl-command (&rest args)
   "Run kubectl command with ARGS."
