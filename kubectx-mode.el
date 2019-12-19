@@ -1,11 +1,12 @@
-;;; kubectx-mode.el --- Global minor-mode to change kubectl context and namespace and display in Emacs mode line
+;;; kubectx-mode.el --- Change kubectl context/namespace and show in mode line -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2018-2019 Terje Sannum
 
 ;; Author: Terje Sannum <terje@offpiste.org>
-;; Created: 19 Oct 2018
-;; Keywords: mode-line kubernetes
-;; Homepage: https://github.com/terjesannum/emacs-kubectx-mode
+;; Keywords: tools kubernetes
+;; Package-Version: 1.0
+;; Package-Requires: ((emacs "24"))
+;; URL: https://github.com/terjesannum/emacs-kubectx-mode
 
 ;; This program is free software; you can redistribute it and/or modify
 ;; it under the terms of the GNU General Public License as published by
@@ -25,6 +26,7 @@
 ;; See https://github.com/terjesannum/emacs-kubectx-mode/blob/master/README.md
 
 ;;; Code:
+
 (defvar kubectx-kubectl-command "kubectl" "Kubectl executable.")
 (defvar kubectx-mode-line-update-timer nil)
 (defvar kubectx-mode-line-string "")
@@ -81,6 +83,7 @@
     (setq kubectx-mode-line-string (kubectx-mode-line-string ctx ns))
     (force-mode-line-update t)))
 
+;;;###autoload
 (define-minor-mode kubectx-mode
   "Switch kubernetes context and show info in the mode line."
   :global t
