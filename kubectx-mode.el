@@ -88,7 +88,7 @@
   "Switch kubernetes context and show info in the mode line."
   :global t
   :keymap `((,kubectx-mode-keybind . ,kubectx-mode-submap))
-  (when (not global-mode-string) (setq global-mode-string '("")))
+  (unless global-mode-string (setq global-mode-string '("")))
   (when kubectx-mode-line-update-timer (cancel-timer kubectx-mode-line-update-timer))
   (if (not kubectx-mode)
       (setq global-mode-string
