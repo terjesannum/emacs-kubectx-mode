@@ -43,7 +43,7 @@
   (with-temp-buffer
     (let ((default-directory "~"))
       (if (and (executable-find kubectx-kubectl-command)
-               (= (apply 'call-process kubectx-kubectl-command nil t nil args) 0))
+               (= (apply #'call-process kubectx-kubectl-command nil t nil args) 0))
           (replace-regexp-in-string "\n\\'" "" (buffer-string))
         "n/a"))))
 
@@ -97,7 +97,7 @@
     (when (> kubectx-mode-line-update-interval 0)
       (setq kubectx-mode-line-update-timer
             (run-at-time nil kubectx-mode-line-update-interval
-                         'kubectx-mode-line-update)))
+                         #'kubectx-mode-line-update)))
     (kubectx-mode-line-update)))
 
 (provide 'kubectx-mode)
