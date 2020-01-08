@@ -4,7 +4,7 @@
 
 ;; Author: Terje Sannum <terje@offpiste.org>
 ;; Keywords: tools kubernetes
-;; Version: 1.0
+;; Version: 1.1
 ;; Package-Requires: ((emacs "24"))
 ;; URL: https://github.com/terjesannum/emacs-kubectx-mode
 
