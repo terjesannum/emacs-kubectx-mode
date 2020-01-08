@@ -32,11 +32,12 @@
 (defvar kubectx-mode-line-string "")
 (defvar kubectx-mode-line-update-interval 5 "Number of seconds between background mode-line updates.")
 (defvar kubectx-mode-line-string-format " [kube:%C %N]" "String to display in mode-line (%C = context, %N = namespace).")
-(defvar kubectx-mode-submap)
-(define-prefix-command 'kubectx-mode-submap)
-(define-key kubectx-mode-submap "c" 'kubectx-set-context)
-(define-key kubectx-mode-submap "n" 'kubectx-set-namespace)
-(defvar kubectx-mode-keybind (kbd "C-c C-k") "Keybind where `kubectx-mode-submap' is assigned.")
+(defvar kubectx-mode-map
+  (let ((km (make-sparse-keymap)))
+    (define-key km (kbd "C-c C-k c") #'kubectx-set-context)
+    (define-key km (kbd "C-c C-k n") #'kubectx-set-namespace)
+    km)
+   "Keymap for `kubectx-mode'.")
 
 (defun kubectx-run-kubectl-command (&rest args)
   "Run kubectl command with ARGS."
@@ -87,7 +88,7 @@
 (define-minor-mode kubectx-mode
   "Switch kubernetes context and show info in the mode line."
   :global t
-  :keymap `((,kubectx-mode-keybind . ,kubectx-mode-submap))
+  :keymap kubectx-mode-map
   (when kubectx-mode-line-update-timer (cancel-timer kubectx-mode-line-update-timer))
   (if kubectx-mode
       (progn
