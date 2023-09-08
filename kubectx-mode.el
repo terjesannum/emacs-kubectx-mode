@@ -79,9 +79,8 @@
 (defun kubectx-mode-line-update ()
   "Update kubectx mode-line string with current context and namespace."
   (interactive)
-  (let ((ctx (kubectx-run-kubectl-command "config" "current-context"))
-        (ns (kubectx-run-kubectl-command "config" "view" "--minify" "--output" "jsonpath={..namespace}")))
-    (setq kubectx-mode-line-string (kubectx-mode-line-string ctx ns))
+  (let ((ctx (split-string (kubectx-run-kubectl-command "config" "view" "--minify" "--output" "jsonpath={.contexts[0].context.cluster} {...contexts[0].context.namespace}"))))
+    (setq kubectx-mode-line-string (kubectx-mode-line-string (car ctx) (cadr ctx)))
     (force-mode-line-update t)))
 
 ;;;###autoload
