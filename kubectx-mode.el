@@ -1,10 +1,10 @@
 ;;; kubectx-mode.el --- Change kubectl context/namespace and show in mode line -*- lexical-binding: t; -*-
 
-;; Copyright (C) 2018-2019 Terje Sannum
+;; Copyright (C) 2018-2023 Terje Sannum
 
 ;; Author: Terje Sannum <terje@offpiste.org>
 ;; Keywords: tools kubernetes
-;; Version: 1.2.0
+;; Version: 1.2.1
 ;; Package-Requires: ((emacs "24"))
 ;; URL: https://github.com/terjesannum/emacs-kubectx-mode
 
@@ -79,7 +79,7 @@
 (defun kubectx-mode-line-update ()
   "Update kubectx mode-line string with current context and namespace."
   (interactive)
-  (let ((ctx (split-string (kubectx-run-kubectl-command "config" "view" "--minify" "--output" "jsonpath={.contexts[0].context.cluster} {...contexts[0].context.namespace}"))))
+  (let ((ctx (split-string (kubectx-run-kubectl-command "config" "view" "--minify" "--output" "jsonpath={.contexts[0].name} {...contexts[0].context.namespace}"))))
     (setq kubectx-mode-line-string (kubectx-mode-line-string (car ctx) (cadr ctx)))
     (force-mode-line-update t)))
 
