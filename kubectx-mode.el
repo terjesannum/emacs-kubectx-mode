@@ -72,15 +72,15 @@
   (kubectx-run-kubectl-command "config" "use-context" context)
   (kubectx-mode-line-update))
 
-(defun kubectx-mode-line-string (context namespace)
+(defun kubectx-format-mode-line-string (context namespace)
   "Create kubectx string with CONTEXT and NAMESPACE to display in mode-line."
-  (replace-regexp-in-string "%C" context (replace-regexp-in-string "%N" namespace kubectx-mode-line-string-format t) t))
+  (replace-regexp-in-string "%C" context (replace-regexp-in-string "%N" (or namespace "n/a") kubectx-mode-line-string-format t) t))
 
 (defun kubectx-mode-line-update ()
   "Update kubectx mode-line string with current context and namespace."
   (interactive)
   (let ((ctx (split-string (kubectx-run-kubectl-command "config" "view" "--minify" "--output" "jsonpath={.contexts[0].name} {...contexts[0].context.namespace}"))))
-    (setq kubectx-mode-line-string (kubectx-mode-line-string (car ctx) (cadr ctx)))
+    (setq kubectx-mode-line-string (kubectx-format-mode-line-string (car ctx) (cadr ctx)))
     (force-mode-line-update t)))
 
 ;;;###autoload
